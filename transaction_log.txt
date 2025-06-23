@@ -1,0 +1,14 @@
+Cuenta creada
+Fueron despositados 500. El nuevo saldo es 1500
+Cuenta creada
+Saldo consultado. El saldo actual es 1000
+Cuenta creada
+Fueron despositados 500. El nuevo saldo es 1500
+Cuenta creada
+Fueron retirados 800. El nuevo saldo es 200
+Transferencia de 800 realizada. El nuevo saldo es 200
+Transferencia recibida de 800. El nuevo saldo es 1300
+Cuenta creada
+Saldo insuficiente para la transferencia de 1200. El saldo actual es 1000
+Cuenta creada
+Fueron retirados 200. El nuevo saldo es 800
