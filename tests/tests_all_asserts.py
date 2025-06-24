@@ -1,5 +1,5 @@
 import unittest
-
+SERVER = "server B"  # Simulando un servidor diferente
 class AllAssertsTest(unittest.TestCase):
     def test_assert_equal(self):
         self.assertEqual(1, 1)
@@ -27,3 +27,16 @@ class AllAssertsTest(unittest.TestCase):
         set1 = {1, 2, 3}
         set2 = {3, 2, 1}
         self.assertSetEqual(set1, set2)
+
+    @unittest.skip("Trabajo en proceso, sera habilitada nuevamente")
+    def test_skip(self):
+        self.assertEqual("hola", "chao" )
+    
+    @unittest.skipIf(SERVER == "server B", "Saltada porque no estamos en el servidor")
+    def test_skip_if(self):
+        self.assertEqual(100, 100)
+
+    @unittest.expectedFailure
+    def test_expected_failure(self):
+        self.assertEqual(1, 2, "Esto es un fallo esperado")
+
