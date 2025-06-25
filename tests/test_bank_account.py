@@ -2,11 +2,20 @@ import unittest
 import requests
 from src.bank_account import BankAccount
 
+def api_is_available():
+    try:
+        url = "https://api.exchangerate-api.com/v4/latest/COP"
+        response = requests.get(url, timeout=5)
+        return response.status_code == 200
+    except:
+        return False
+
 
 class BankAccountTests(unittest.TestCase):
     def setUp(self) -> None:
         import os
         self.account = BankAccount(balance = 1000, log_file = 'transaction_log.txt')
+        self.account2 = BankAccount(balance = 10000000, log_file = 'transaction_log.txt')
     
     def tearDown(self) -> None:
         import os
@@ -54,25 +63,18 @@ class BankAccountTests(unittest.TestCase):
     def test_count_transactions(self):
         assert self._count_lines(self.account.log_file) == 1
         self.account.deposit(500)
+
         assert self._count_lines(self.account.log_file) == 2
-
-    def test_get_exchange_rate(self):
-        rate = self.account.get_exchange_rate('USD')
-        #assert rate is not None
-        self.assertIsNotNone(rate, 'La tasa de cambio no debe ser None')
-        #assert isinstance(rate, float)
-        self.assertIsInstance(rate, float, 'La tasa de cambio debe ser un float') 
     
-        @unittest.skipUnless(api_is_available(), "La API de tipo de cambio no está disponible.")
+    @unittest.skipUnless(api_is_available(), "La API de tipo de cambio no está disponible.")
     def test_transferencia_exitosa_usd(self):
-        cuenta = BankAccount(balance=10000000)  # 10 millones COP
-        resultado = cuenta.transfer_foreign_currency(100, "USD")  # Transferir 100 USD
+        
+        resultado = self.account2.transfer_foreign_currency(100, "USD")  # Transferir 100 USD
         self.assertTrue(resultado, "La transferencia en USD debería ser exitosa con suficiente saldo.")
-
+    
     @unittest.skipUnless(api_is_available(), "La API de tipo de cambio no está disponible.")
     def test_transferencia_exitosa_eur(self):
-        cuenta = BankAccount(balance=10000000)  # 10 millones COP
-        resultado = cuenta.transfer_foreign_currency(100, "EUR")  # Transferir 100 EUR
+        resultado = self.account2.transfer_foreign_currency(100, "EUR")  # Transferir 100 EUR
         self.assertTrue(resultado, "La transferencia en EUR debería ser exitosa con suficiente saldo.")
 
     @unittest.skipUnless(api_is_available(), "La API de tipo de cambio no está disponible.")

@@ -56,22 +56,22 @@ class BankAccount:
             self._log_transaction(f'Error al obtener la tasa de cambio: {str(e)}')
             return None 
 
-"""
-Realiza una transferencia en la moneda deseada, descontando el equivalente en COP.
-"""
-def transfer_foreign_currency(self, amount_target_currency, currency_api="USD"):
-        
-        rate = self.get_exchange_rate(currency_api)
-        if rate is None:
-            self._log_transaction(f"No se pudo obtener la tasa para {currency_api}. Transferencia cancelada.")
-            return False
+    """
+    Realiza una transferencia en la moneda deseada, descontando el equivalente en COP.
+    """
+    def transfer_foreign_currency(self, amount_target_currency, currency_api="USD"):
+            
+            rate = self.get_exchange_rate(currency_api)
+            if rate is None:
+                self._log_transaction(f"No se pudo obtener la tasa para {currency_api}. Transferencia cancelada.")
+                return False
 
-        required_cop = amount_target_currency / rate
+            required_cop = amount_target_currency / rate
 
-        if self.balance >= required_cop:
-            self.balance -= required_cop
-            self._log_transaction(f"Transferencia exitosa: {amount_target_currency} {currency_api} ({required_cop:.2f} COP descontados).")
-            return True
-        else:
-            self._log_transaction(f"Fondos insuficientes para transferir {amount_target_currency} {currency_api}. Saldo: {self.balance:.2f} COP")
-            return False
+            if self.balance >= required_cop:
+                self.balance -= required_cop
+                self._log_transaction(f"Transferencia exitosa: {amount_target_currency} {currency_api} ({required_cop:.2f} COP descontados).")
+                return True
+            else:
+                self._log_transaction(f"Fondos insuficientes para transferir {amount_target_currency} {currency_api}. Saldo: {self.balance:.2f} COP")
+                return False
