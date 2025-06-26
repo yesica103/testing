@@ -1,7 +1,5 @@
 import unittest
 
-
-
 from tests.test_bank_account import BankAccountTests, api_is_available
 
 def bank_account_suite():
