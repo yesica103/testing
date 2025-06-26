@@ -59,8 +59,7 @@ class BankAccount:
     """
     Realiza una transferencia en la moneda deseada, descontando el equivalente en COP.
     """
-    def transfer_foreign_currency(self, amount_target_currency, currency_api="USD"):
-            
+    def transfer_foreign_currency(self, amount_target_currency, currency_api):            
             rate = self.get_exchange_rate(currency_api)
             if rate is None:
                 self._log_transaction(f"No se pudo obtener la tasa para {currency_api}. Transferencia cancelada.")

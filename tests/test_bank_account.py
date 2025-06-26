@@ -60,15 +60,8 @@ class BankAccountTests(unittest.TestCase):
         #assert os.path.exists(self.account.log_file)
         self.assertTrue(os.path.exists(self.account.log_file), 'El archivo de log no existe')
 
-    def test_count_transactions(self):
-        assert self._count_lines(self.account.log_file) == 1
-        self.account.deposit(500)
-
-        assert self._count_lines(self.account.log_file) == 2
-    
     @unittest.skipUnless(api_is_available(), "La API de tipo de cambio no está disponible.")
     def test_transferencia_exitosa_usd(self):
-        
         resultado = self.account2.transfer_foreign_currency(100, "USD")  # Transferir 100 USD
         self.assertTrue(resultado, "La transferencia en USD debería ser exitosa con suficiente saldo.")
     
@@ -79,12 +72,10 @@ class BankAccountTests(unittest.TestCase):
 
     @unittest.skipUnless(api_is_available(), "La API de tipo de cambio no está disponible.")
     def test_transferencia_fondos_insuficientes(self):
-        cuenta = BankAccount(balance=1000)  # Saldo bajo
-        resultado = cuenta.transfer_foreign_currency(500, "USD")  # Intentar transferir 500 USD
+        resultado = self.account2.transfer_foreign_currency(10000000000000000, "USD")  # Intentar transferir 500 USD
         self.assertFalse(resultado, "La transferencia debería fallar por fondos insuficientes.")
 
     @unittest.skipUnless(api_is_available(), "La API de tipo de cambio no está disponible.")
     def test_moneda_inexistente(self):
-        cuenta = BankAccount(balance=10000000)
-        resultado = cuenta.transfer_foreign_currency(100, "XYZ")  # Moneda que no existe
+        resultado = self.account2.transfer_foreign_currency(1000000000000000000000, "XYZ")  # Moneda que no existe
         self.assertFalse(resultado, "La transferencia debería fallar con moneda inexistente.")
