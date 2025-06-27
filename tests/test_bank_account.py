@@ -1,7 +1,9 @@
 import unittest 
 import requests
 from src.bank_account import BankAccount
-
+from unittest.mock import patch
+import unittest.mock
+from src.exceptions import InsufficientFundsError, WithdrawalTimeRestrictionError
 def api_is_available():
     try:
         url = "https://api.exchangerate-api.com/v4/latest/COP"
@@ -79,3 +81,21 @@ class BankAccountTests(unittest.TestCase):
     def test_moneda_inexistente(self):
         resultado = self.account2.transfer_foreign_currency(1000000000000000000000, "XYZ")  # Moneda que no existe
         self.assertFalse(resultado, "La transferencia debería fallar con moneda inexistente.")
+
+    @patch('src.bank_account.datetime')
+    def test_withdraw_during_business_hours(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 10
+        new_balance = self.account.withdraw(100)
+        self.assertEqual(new_balance, 900)
+
+    @patch('src.bank_account.datetime')
+    def test_withdraw_raises_disallow_before_business_hours(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 7
+        with self.assertRaises(WithdrawalTimeRestrictionError):
+            self.account.withdraw(100)
+
+    @patch('src.bank_account.datetime')
+    def test_withdraw_raises_disallow_after_business_hours(self, mock_datetime):
+        mock_datetime.now.return_value.hour = 19
+        with self.assertRaises(WithdrawalTimeRestrictionError):
+            self.account.withdraw(100)
