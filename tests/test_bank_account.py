@@ -111,4 +111,8 @@ class BankAccountTests(unittest.TestCase):
                 self.account = BankAccount(balance = 1000, log_file = 'transaction_log.txt')
                 new_balance = self.account.deposit(case['ammount'])
                 self.assertEqual(new_balance, case['expected_balance'])
-        
+
+    def test_withdraw_with_insufficient_funds(self):
+        with self.assertRaises(InsufficientFundsError):
+            self.account.withdraw(2000)
+     
